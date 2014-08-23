@@ -1,69 +1,83 @@
-Getting-Cleaning-Data
+Getting-Cleaning-Data     CodeBook for moltentable.txt dataset
 =====================
-##Set working directory (change appropriately if needed)
 
-setwd("C:/Users/Jordi/Desktop/Getting_Cleaning_Data/Course_project/UCI HAR Dataset")
+Credits of original data:
 
---------Objectives of the course project on week 3 and available data to be used:
+==================================================================
+Human Activity Recognition Using Smartphones Dataset
+Version 1.0
+==================================================================
+Jorge L. Reyes-Ortiz, Davide Anguita, Alessandro Ghio, Luca Oneto.
+Smartlab - Non Linear Complex Systems Laboratory
+DITEN - Università degli Studi di Genova.
+Via Opera Pia 11A, I-16145, Genoa, Italy.
+activityrecognition@smartlab.ws
+www.smartlab.ws
+==================================================================
 
-## 1)Merges the training and the test sets to create one data set.
+The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, we captured 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data. 
 
- (These are present as 9 txt files -one for each inertial signal- inside each subdirectory named test\Inertial Signals & train\Inertial Signals)
+The sensor signals (accelerometer and gyroscope) were pre-processed by applying noise filters and then sampled in fixed-width sliding windows of 2.56 sec and 50% overlap (128 readings/window). The sensor acceleration signal, which has gravitational and body motion components, was separated using a Butterworth low-pass filter into body acceleration and gravity. The gravitational force is assumed to have only low frequency components, therefore a filter with 0.3 Hz cutoff frequency was used. From each window, a vector of features was obtained by calculating variables from the time and frequency domain. See 'features_info.txt' for more details. 
 
-## 2)Extracts only the measurements on the mean and standard deviation for each measurement. 
+For each record it is provided:
+======================================
 
-(There are 128 columns that represent one single measurement at regular intervals. These 128 values on each row have to be averaged and compute the sd)
+- Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
+- Triaxial Angular velocity from the gyroscope. 
+- A 561-feature vector with time and frequency domain variables. 
+- Its activity label. 
+- An identifier of the subject who carried out the experiment.
 
-## 3)Uses descriptive activity names to name the activities in the data set 
+The dataset includes the following files:
+=========================================
 
-(The activity names are represented by numbers on tables "test/y_test.txt" &"train/y_train.txt", that matches the rows of the 18 tables above with the activities.To know which number represents each name of activity, "activity_labels.txt" table is used.
+- 'README.txt'
 
-## 4)Appropriately labels the data set with descriptive variable names. 
+- 'features_info.txt': Shows information about the variables used on the feature vector.
 
-(The 9 variable names can be extracted from the txt files names, removing the last 9 characters from test datasets. 
+- 'features.txt': List of all features.
 
-## 5)Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+- 'activity_labels.txt': Links the class labels with their activity name.
 
-(As each subject can have several measurements for each activity, these measurements (both mean & sd) have to be averaged to have results only for unique combinations of subject-activity-summary, where subject (1:30), activity(1:6), summary("mean", "sd"). Total 30*6*2=360 rows
+- 'train/X_train.txt': Training set.
 
+- 'train/y_train.txt': Training labels.
 
-This is the process used in the run_analysis.R script (as commented inside it):
+- 'test/X_test.txt': Test set.
 
+- 'test/y_test.txt': Test labels.
 
-a) Read subject tables for test&train datasets
+The following files are available for the train and test data. Their descriptions are equivalent. 
 
-b) Read activity levels to match levels&labels
+- 'train/subject_train.txt': Each row identifies the subject who performed the activity for each window sample. Its range is from 1 to 30. 
 
-c) Create a table with subjects&activities
+- 'train/Inertial Signals/total_acc_x_train.txt': The acceleration signal from the smartphone accelerometer X axis in standard gravity units 'g'. Every row shows a 128 element vector. The same description applies for the 'total_acc_x_train.txt' and 'total_acc_z_train.txt' files for the Y and Z axis. 
 
-d) Change activity level numbers by labels in both tables
+- 'train/Inertial Signals/body_acc_x_train.txt': The body acceleration signal obtained by subtracting the gravity from the total acceleration. 
 
-e) Inspect resulting tables
+- 'train/Inertial Signals/body_gyro_x_train.txt': The angular velocity vector measured by the gyroscope for each window sample. The units are radians/second. 
 
-f) Creating test&train lists of Inertial signals (each txt file represents one signal)
+The Tidy table obtained:
+==========================
 
-g) Renaming tables to include mean&sd for each signal, both in test&train datasets
+1) In one single table, the train and test datasets have been joined and summarized, giving only the mean and standard deviation of the 128 values from each of the 9 Inertial Signals.
 
-h) Assuming same number of signals for test&train datasets (length(testinertial)), Loop to add 1 column for each signal (mean or sd is indicated in column "summary")
+2) The resulting Tidy table has then three columns that define:
 
-i) Read both test&train tables for each Inertial Signal [i] and compute mean & standard deviation
+	a) the "subject" who performed the activity (range 1:30)
 
-j) Colnames are given by the substring removing last 9 characters
+	b) the "activity" name as described in table  'activity_labels.txt' (range 1:6)
 
-k) Testing for good results. Number of rows must match with the sum of test&train datasets
+	c) the "summary" computed from the 128 measurements ("mean" or "sd")
 
+3) The rest of columns show the values of the average variables for each of the 9 Inertial Signals for each unique combination of subject, activity and summary
+, giving then a total number of rows of 30*6*2=360, knowing that in the above tables, the same subject could have several signal measurements.
 
-## 5)Creates a second, independent tidy data set with the average of each variable
-##   for each activity and each subject. (use of tapply and reshape2-melt functions)
+4) This 9 column names have been extracted from the Inertial Signals filenames, removing "_test.txt" or "_train.txt", so the column names (4 to 13) are:
 
-
-l) Finding unique combinations of subject, activity and summary joining the three columns as one text column (using cbind&paste), with comma separator
-
-
-m) Computing the mean of each variable (both mean&sd for each subject&activity). Use of reshape2-dcast function to average variables for each combination
-
-
-n) Reconstructing the three columns of subject, activity & summary, and giving colnames again. Use comma separator and read.table to split again in 3 columns.
+	 total_acc_x, total_acc_y, total_acc_z,  body_acc_x, body_acc_y, body_acc_z,body_gyro_x, body_gyro_y, body_gyro_z.
 
 
-o) Saving the table with write.table() using row.names=FALSE
+Units: 
+======
+- Units are maintained in standard gravity units 'g' for accelerations (total_acc and body_acc) and radians/second for angular velocities (body_gyro).
